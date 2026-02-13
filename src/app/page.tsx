@@ -1,65 +1,96 @@
-import Image from "next/image";
+'use client'
+
+import Image from 'next/image';
+import { useState } from 'react';
+import { Modal } from '@/components/ui/Modal'; 
+import { RsvpForm } from '@/components/RsvpForm';
+
+// --- CONFIGURAÇÕES DO LOCAL (Sítio Lírio dos Vales) ---
+const LOCATION = {
+  lat: -22.6810774, // Coordenadas exatas do Sítio
+  lng: -43.1574441,
+  nickname: "Aniversário da Maithe (Sítio Lírio dos Vales)", // Nome que aparece no app
+  address: "Av. Dr. Paulo Diniz Carneiro, 440 - Magé, RJ" // Endereço pra confirmar
+};
+
+// --- LINK MÁGICO DO UBER ---
+// action=setPickup&pickup=my_location -> Pega a localização atual da pessoa
+// dropoff[...] -> Define o destino exato da festa
+const UBER_URL = `https://m.uber.com/ul/?action=setPickup&client_id=&pickup=my_location&dropoff[latitude]=${LOCATION.lat}&dropoff[longitude]=${LOCATION.lng}&dropoff[nickname]=${encodeURIComponent(LOCATION.nickname)}&dropoff[formatted_address]=${encodeURIComponent(LOCATION.address)}`;
 
 export default function Home() {
+  const [isRsvpOpen, setIsRsvpOpen] = useState(false);
+  const [isGiftsOpen, setIsGiftsOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+    <main className="fixed inset-0 w-full h-[100dvh] bg-zinc-900 flex items-center justify-center overflow-hidden">
+      
+      {/* --- CARTÃO DO CONVITE --- */}
+      <div className="relative h-full max-h-[100dvh] aspect-[9/16] w-auto shadow-2xl overflow-hidden bg-white">
+        
+        {/* Imagem de Fundo */}
+        <Image 
+          src="/images/convite-main.jpg" 
+          alt="Convite de 1 Ano da Maithe"
+          fill
+          className="object-fill"
+          priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+
+        {/* --- ÁREA DE BOTÕES INVISÍVEIS --- */}
+        <div className="absolute bottom-[28%] left-[8%] right-[8%] h-[15%] flex justify-between z-10">
+          
+          {/* 1. Botão Confirmar Presença */}
+          <button 
+            onClick={() => setIsRsvpOpen(true)}
+            className="w-[30%] h-full opacity-0 cursor-pointer active:bg-white/20 transition rounded-full"
+            aria-label="Confirmar Presença"
+          />
+
+          {/* 2. Botão Uber (Agora com Destino Certo!) */}
+          <a 
+            href={UBER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-[30%] h-full opacity-0 cursor-pointer active:bg-white/20 transition rounded-full block"
+            aria-label="Ir de Uber para o Sítio"
+          />
+
+          {/* 3. Botão Presentes */}
+          <button 
+            onClick={() => setIsGiftsOpen(true)}
+            className="w-[30%] h-full opacity-0 cursor-pointer active:bg-white/20 transition rounded-full"
+            aria-label="Ver Sugestão de Presentes"
+          />
+        </div>
+      </div>
+
+      {/* --- MODAL 1: CONFIRMAR PRESENÇA --- */}
+      <Modal 
+        isOpen={isRsvpOpen} 
+        onClose={() => setIsRsvpOpen(false)} 
+        title="Confirmar Presença 🥳"
+      >
+        <RsvpForm onClose={() => setIsRsvpOpen(false)} />
+      </Modal>
+
+      {/* --- MODAL 2: PRESENTES --- */}
+      <Modal 
+        isOpen={isGiftsOpen} 
+        onClose={() => setIsGiftsOpen(false)} 
+        noPadding={true} 
+      >
+        <Image 
+          src="/images/sugestao-presentes.jpg" 
+          alt="Sugestão de Presentes"
+          width={600} 
+          height={1000}
+          className="w-full h-auto object-contain max-h-[85vh]"
           priority
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </Modal>
+
+    </main>
   );
 }

@@ -1,26 +1,146 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* --- FORÇANDO A BELEZA (CSS NA MARRA) --- */
+
+/* Input Arredondado e Bonito */
+.input-lindo {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 50px; /* Redondo igual pílula */
+  border: 1px solid #e9d5ff; /* Borda lilás clarinha */
+  background-color: #faf5ff; /* Fundo roxo bem clarinho */
+  font-size: 16px;
+  color: #4c1d95; /* Texto roxo escuro */
+  outline: none;
+  transition: all 0.3s ease;
+  margin-top: 5px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.input-lindo:focus {
+  background-color: #ffffff;
+  border-color: #a855f7; /* Roxo vibrante ao clicar */
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2); /* Brilho roxo */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Botão Gradiente */
+.btn-estribado {
+  width: 100%;
+  padding: 16px;
+  border-radius: 50px;
+  background: linear-gradient(to right, #a855f7, #ec4899); /* Roxo para Rosa */
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.btn-estribado:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+}
+
+.btn-estribado:active {
+  transform: scale(0.98);
+}
+
+/* Estilo do Label */
+.label-chique {
+  font-size: 14px;
+  font-weight: 700;
+  color: #6b21a8; /* Roxo escuro */
+  margin-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- ESTILOS DA LISTA VIP (Pra garantir que fique bonito) --- */
+
+.vip-container {
+  min-height: 100vh;
+  background-color: #faf5ff; /* Fundo Lilás Claro */
+  padding: 20px;
+  padding-bottom: 100px;
+  font-family: sans-serif;
+}
+
+.vip-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.vip-title {
+  font-size: 28px;
+  color: #581c87; /* Roxo Escuro */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.vip-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 450px;
+  margin: 0 auto 30px auto;
+}
+
+.vip-stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 1px solid #f3e8ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.vip-stat-number {
+  font-size: 40px;
+  font-weight: 900;
+  color: #7e22ce; /* Roxo Vibrante */
+  line-height: 1;
+}
+
+.vip-list-container {
+  max-width: 450px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.vip-guest-card {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #d8b4fe; /* Borda lateral roxa */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vip-footer-badge {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 12px;
+  color: #a855f7;
+  background: #f3e8ff;
+  padding: 10px;
+  border-radius: 50px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e9d5ff;
 }
