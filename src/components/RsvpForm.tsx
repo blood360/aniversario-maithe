@@ -164,8 +164,6 @@ function SubmitButton() {
 
 export function RsvpForm({ onClose }: { onClose: () => void }) {
   const [state, formAction] = useFormState(confirmPresence, null);
-  // Removi o state do checkbox pois agora o botão de agenda é opcional no final
-  // Mas mantive a variavel pra logica interna se quiser usar depois
   const [showAgendaBtn, setShowAgendaBtn] = useState(false);
 
   useEffect(() => {
@@ -177,8 +175,6 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
         particleCount: 40, spread: 100, origin: { y: 0.6 },
         shapes: [unicorn, 'circle'], colors: ['#d8b4fe', '#fce7f3'] 
       });
-      // AQUI TÁ O PULO DO GATO: Não abro a janela automaticamente!
-      // Só mostro o sucesso e o botão pra pessoa clicar se quiser.
     }
   }, [state?.success]);
 
