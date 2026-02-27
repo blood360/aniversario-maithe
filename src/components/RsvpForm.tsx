@@ -249,17 +249,31 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
         </div>
       </div>
 
-      {/* QUANTIDADE */}
-      <div style={styles.inputContainer}>
-        <label htmlFor="guestsCount" style={styles.label}>Quantas Pessoas?</label>
-        <div style={{ position: 'relative' }}>
-          <div style={styles.icon}><Users size={20} /></div>
-          <select name="guestsCount" id="guestsCount" style={{...styles.input, appearance: 'none', cursor: 'pointer'}}>
-            {[1, 2, 3, 4, 5, 6].map(num => (<option key={num} value={num}>{num} {num === 1 ? 'Pessoa' : 'Pessoas'}</option>))}
-          </select>
-          <div style={styles.selectArrow}>▼</div>
+      {/* PESSOAS */}
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+        <div style={{ flex: '1', position: 'relative' }}>
+          <label htmlFor="adultsCount" style={ styles.label }>Adultos</label>
+          <div style={{ position: 'relative' }}>
+            <div style={styles.icon}><User size={18} /></div>
+            <select name="adultsCount" id="adultsCount" style={{...styles.input, paddingLeft: '40px', appearance: 'none', cursor: 'pointer'}}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (<option key={num} value={num}>{num}</option>))}
+            </select>
+            <div style={styles.selectArrow}>▼</div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, position: 'relative' }}>
+          <label htmlFor="childrenCount" style={styles.label}>Crianças</label>
+          <div style={{ position: 'relative' }}>
+            <div style={styles.icon}><Users size={18} /></div>
+            <select name="childrenCount" id="childrenCount" style={{...styles.input, paddingLeft: '40px', appearance: 'none', cursor: 'pointer'}}>
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (<option key={num} value={num}>{num}</option>))}
+            </select>
+            <div style={styles.selectArrow}>▼</div>
+          </div>
         </div>
       </div>
+
       
       {/* CHECKBOX AGENDA (Visualmente bonito) */}
       <label htmlFor="calendarCheck" style={styles.checkboxContainer}>

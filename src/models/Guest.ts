@@ -6,9 +6,21 @@ const GuestSchema = new Schema({
     required: [true, 'O nome é obrigatório!'],
     trim: true,
   },
+  // Campo para quantidade de adultos
+  adultsCount: {
+    type: Number,
+    required: [true, 'A quantidade de adultos é obrigatória!'],
+    default: 1,
+  },
+  // Campo para quantidade de crianças
+  childrenCount: {
+    type: Number,
+    default: 0,
+  },
+  // Mantemos o total para facilitar a conta do Buffet no painel
   guestsCount: {
     type: Number,
-    required: [true, 'A quantidade de pessoas é obrigatória!'],
+    required: [true, 'O total de pessoas é obrigatório!'],
     default: 1,
   },
   confirmedAt: {

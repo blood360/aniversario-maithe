@@ -15,62 +15,57 @@ export function Modal({ isOpen, onClose, children, title, noPadding = false }: M
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          {/* Fundo Escuro */}
+        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+          {/* Fundo Escuro com Z-Index alto */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
           />
 
-          {/* Wrapper de Centralização */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+          {/* O Modal em Si - Garantindo que seja clicável */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className={`bg-white shadow-2xl relative z-[1000] overflow-hidden pointer-events-auto ${
+              noPadding 
+                ? "w-full max-w-[360px] rounded-[2.5rem]" 
+                : "w-[95%] max-w-md rounded-[2rem] ring-4 ring-purple-100"
+            }`}
+          >
             
-            {/* O Modal em Si */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
-              className={`bg-white max-w-md shadow-2xl pointer-events-auto overflow-hidden ring-4 ring-purple-100 relative rounded-[2rem] ${
-                noPadding ? "w-[95%] h-auto" : "w-[90%]"
+            {/* Botão de Fechar Unificado */}
+            <button 
+              onClick={onClose} 
+              className={`absolute z-[1010] p-2 rounded-full transition-all active:scale-90 shadow-md ${
+                noPadding 
+                  ? "top-4 right-4 bg-white/90 text-purple-900" 
+                  : "top-4 right-4 bg-purple-100 text-purple-600"
               }`}
             >
-              
-              {/* Lógica do Cabeçalho */}
-              {noPadding ? (
-                // Botão Flutuante (Modo Foto)
-                <button 
-                  onClick={onClose} 
-                  className="absolute top-3 right-3 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full z-20 backdrop-blur-md transition"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              ) : (
-                // Cabeçalho Normal (Modo Texto)
-                <div className="bg-purple-50 p-4 border-b border-purple-100 flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-purple-600 pl-2 font-serif">
-                    {title || <span>&nbsp;</span>}
-                  </h3>
-                  <button 
-                    onClick={onClose} 
-                    className="bg-white p-2 rounded-full text-purple-400 hover:text-purple-600 hover:bg-purple-100 transition shadow-sm"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
+              <X className="w-5 h-5" />
+            </button>
 
-              {/* Lógica do Padding */}
-              <div className={noPadding ? "p-0" : "p-6"}>
-                {children}
+            {/* Cabeçalho apenas se NÃO for noPadding */}
+            {!noPadding && title && (
+              <div className="bg-purple-50 p-5 border-b border-purple-100">
+                <h3 className="text-xl font-bold text-purple-700 font-serif pr-10">
+                  {title}
+                </h3>
               </div>
+            )}
 
-            </motion.div>
-          </div>
-        </>
+            {/* Conteúdo */}
+            <div className={`${noPadding ? "p-0" : "p-6"}`}>
+              {children}
+            </div>
+
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
