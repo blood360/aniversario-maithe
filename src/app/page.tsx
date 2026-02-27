@@ -121,6 +121,15 @@ export default function Home() {
             <p style={{ fontSize: '12px', color: '#9333ea', fontWeight: '600', marginTop: '4px' }}>Sítio Lírio dos Vales - Magé, RJ</p>
           </div>
 
+          <a 
+          href="https://wa.me/5521997916447?text=Olá%20Adriano!%20Vi%20o%20convite%20digital%20da%20Maithe%20e%20gostaria%20de%20fazer%20um%20orçamento!"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[999] text-[10px] text-white/80 hover:text-white bg-black/30 px-4 py-1.5 rounded-full backdrop-blur-md transition-all whitespace-nowrap text-decoration-none shadow-sm"
+        >
+          Desenvolvido por <span className="font-bold text-purple-200">Adriano Santos</span> 💻
+        </a>
+
         </div>
       </Modal>
 

@@ -4,7 +4,7 @@ import { confirmPresence } from '@/app/actions';
 import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle, User, Users, MessageCircle, ArrowRight, Calendar } from 'lucide-react';
+import { CheckCircle, User, Users, MessageCircle, ArrowRight, Calendar, AlertCircle } from 'lucide-react';
 
 // --- CONFIGURAÇÕES ---
 const WHATSAPP_NUMBER = "5521997916447";
@@ -30,9 +30,7 @@ const generateGoogleCalendarLink = () => {
   return `${baseUrl}?${params.toString()}`;
 };
 
-// --- ESTILOS INLINE (Blindados) ---
 const styles = {
-  // A CAIXA BRANCA QUE SEGURA TUDO
   mainContainer: {
     backgroundColor: 'white',
     padding: '20px',
@@ -41,7 +39,6 @@ const styles = {
     boxSizing: 'border-box' as const,
     overflowX: 'hidden' as const
   },
-  // O TÍTULO PADRÃO FIFA
   mainTitle: {
     textAlign: 'center' as const,
     color: '#4c1d95',
@@ -60,7 +57,7 @@ const styles = {
   
   successCard: { textAlign: 'center' as const, width: '100%', boxSizing: 'border-box' as const },
   
-  // A SUA PROPAGANDA AGORA NÃO CORTA MAIS (tem border-box)
+  // A MINHA PROPAGANDA 
   adCard: {
     marginTop: '20px',
     padding: '20px',
@@ -92,9 +89,18 @@ function SubmitButton() {
 export function RsvpForm({ onClose }: { onClose: () => void }) {
   const [state, formAction] = useActionState(confirmPresence, null);
   const [showAgendaBtn, setShowAgendaBtn] = useState(false);
+  const [hasAlreadyConfirmed, setHasAlreadyConfirmed] = useState(false);
+
+  useEffect(() => {
+    const checkMemory = localStorage.getItem('maithe_rsvp_confirmed');
+    if (checkMemory === 'true') {
+      setHasAlreadyConfirmed(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (state?.success) {
+      localStorage.setItem('maithe_rsvp_confirmed', 'true');
       const scalar = 2;
       const unicorn = confetti.shapeFromText({ text: '🦋', scalar });
       confetti({ 
@@ -103,6 +109,25 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
       });
     }
   }, [state?.success]);
+
+  // --- TELA PARA QUEM JÁ TINHA CONFIRMADO ANTES ---
+  if (hasAlreadyConfirmed && !state?.success) {
+    return (
+      <div style={styles.mainContainer}>
+        <div style={styles.successCard}>
+          <div style={{ background: '#fef3c7', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 15px auto' }}>
+            <AlertCircle size={30} color="#d97706" />
+          </div>
+          <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#b45309', margin: '0 0 5px 0' }}>Você já confirmou!</h3>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>Sua presença já está garantida na nossa lista. Nos vemos no Sítio! 🦋</p>
+          
+          <button onClick={onClose} style={styles.agendaButton}>
+            Entendi, fechar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // --- TELA DE SUCESSO ---
   if (state?.success) {
@@ -124,7 +149,7 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
               </a>
           )}
 
-          {/* --- SUA ÁREA DE MARKETING --- */}
+          {/* --- MINHA ÁREA DE MARKETING --- */}
           <div style={styles.adCard}>
             <p style={{ fontSize: '10px', fontWeight: 'bold', color: '#9ca3af', textTransform: 'uppercase', marginBottom: '10px' }}>
               Gostou deste convite?
@@ -172,7 +197,7 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        {/* PESSOAS */}
+        {/* ADULTOS */}
         <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
           <div style={{ flex: '1', position: 'relative' }}>
             <label htmlFor="adultsCount" style={ styles.label }>Adultos</label>
@@ -185,6 +210,7 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {/* CRIANÇAS */}
           <div style={{ flex: 1, position: 'relative' }}>
             <label htmlFor="childrenCount" style={styles.label}>Crianças</label>
             <div style={{ position: 'relative' }}>
