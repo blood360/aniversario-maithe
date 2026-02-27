@@ -6,7 +6,7 @@ const GuestSchema = new Schema({
     required: [true, 'O nome é obrigatório!'],
     trim: true,
   },
-  // Campo para quantidade de adultos
+  // Campo novo para quantidade de adultos
   adultsCount: {
     type: Number,
     required: [true, 'A quantidade de adultos é obrigatória!'],
