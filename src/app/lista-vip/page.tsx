@@ -84,7 +84,7 @@ export default async function ListaVip() {
       <div style={styles.mobileFrame}>
         
         <div style={styles.header}>
-          <h1 style={styles.title}>Lista da Maithe 🦋</h1>
+          <h1 style={styles.title}>Lista da Maitê 🦋</h1>
           <span style={styles.subtitle}>Painel da Mamãe</span>
         </div>
 

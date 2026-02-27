@@ -1,9 +1,11 @@
 'use client'
 
 import { confirmPresence } from '@/app/actions';
-import { useFormState, useFormStatus } from 'react-dom';
+// 1ª MUDANÇA: Tiramos os hooks daqui
+import { useFormStatus } from 'react-dom';
+// 2ª MUDANÇA: E colocamos o novo useActionState direto do 'react'
+import { useActionState, useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { useEffect, useState } from 'react';
 import { CheckCircle, User, Users, MessageCircle, ArrowRight, Calendar } from 'lucide-react';
 
 // --- CONFIGURAÇÕES ---
@@ -51,19 +53,20 @@ const styles = {
     left: '15px',
     top: '50%',
     transform: 'translateY(-50%)',
-    color: '#d8b4fe', // Lilás claro
+    color: '#d8b4fe',
     pointerEvents: 'none' as const
   },
   input: {
     width: '100%',
-    padding: '14px 14px 14px 45px', // Espaço pro ícone
+    padding: '14px 14px 14px 45px',
     borderRadius: '20px',
     border: '1px solid #e9d5ff',
     backgroundColor: '#faf5ff',
     fontSize: '16px',
     color: '#4c1d95',
     outline: 'none',
-    transition: 'all 0.3s'
+    transition: 'all 0.3s',
+    boxSizing: 'border-box' as const
   },
   selectArrow: {
     position: 'absolute' as const,
@@ -87,7 +90,7 @@ const styles = {
   },
   submitButton: {
     width: '100%',
-    background: 'linear-gradient(to right, #a855f7, #ec4899)', // Gradiente Roxo -> Rosa
+    background: 'linear-gradient(to right, #a855f7, #ec4899)',
     color: 'white',
     padding: '16px',
     borderRadius: '50px',
@@ -113,7 +116,7 @@ const styles = {
     padding: '20px',
     backgroundColor: 'white',
     borderRadius: '20px',
-    border: '2px dashed #d8b4fe', // Borda tracejada lilás
+    border: '2px dashed #d8b4fe', 
     position: 'relative' as const,
     overflow: 'hidden'
   },
@@ -123,7 +126,7 @@ const styles = {
     justifyContent: 'center',
     gap: '8px',
     width: '100%',
-    backgroundColor: '#25D366', // Verde WhatsApp
+    backgroundColor: '#25D366',
     color: 'white',
     fontWeight: 'bold',
     padding: '12px',
@@ -163,7 +166,8 @@ function SubmitButton() {
 }
 
 export function RsvpForm({ onClose }: { onClose: () => void }) {
-  const [state, formAction] = useFormState(confirmPresence, null);
+  // 3ª MUDANÇA: Substituí o useFormState por useActionState
+  const [state, formAction] = useActionState(confirmPresence, null);
   const [showAgendaBtn, setShowAgendaBtn] = useState(false);
 
   useEffect(() => {
@@ -239,7 +243,7 @@ export function RsvpForm({ onClose }: { onClose: () => void }) {
           <div style={styles.icon}><User size={20} /></div>
           <input 
             type="text" name="name" id="name" required 
-            placeholder="Ex: Tio João e Família" 
+            placeholder="Ex: Dinda e Família" 
             style={styles.input} 
           />
         </div>

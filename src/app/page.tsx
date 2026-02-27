@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Modal } from '@/components/ui/Modal'; 
 import { RsvpForm } from '@/components/RsvpForm';
-import { Car } from 'lucide-react';
+import { Car, MapPin } from 'lucide-react'; // <-- Adicionei só o ícone do mapa aqui
 
 const LOCATION = {
   lat: -22.6810774,
@@ -15,6 +15,7 @@ const LOCATION = {
 
 const UBER_URL = `https://m.uber.com/ul/?action=setPickup&client_id=&pickup=my_location&dropoff[latitude]=${LOCATION.lat}&dropoff[longitude]=${LOCATION.lng}&dropoff[nickname]=${encodeURIComponent(LOCATION.nickname)}&dropoff[formatted_address]=${encodeURIComponent(LOCATION.address)}`;
 const NINETY_NINE_URL = `https://99app.com/ul/?action=setPickup&dropoff[latitude]=${LOCATION.lat}&dropoff[longitude]=${LOCATION.lng}`;
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${LOCATION.lat},${LOCATION.lng}`; // <-- Rota do Maps
 
 export default function Home() {
   const [isRsvpOpen, setIsRsvpOpen] = useState(false);
@@ -32,74 +33,97 @@ export default function Home() {
           fill
           className="object-fill"
           priority
-          sizes="(max-width: 768px) 100vw, 50vw"
         />
 
-        {/* ÁREA DE BOTÕES - Usei bottom-[15%] conforme a foto que você mandou */}
-        <div className="absolute bottom-[23%] left-[19%] right-[7%] h-[12%] flex gap-4 z-50 pointer-events-auto">
+        {/* --- ÁREA DE BOTÕES COM A TRAVA DE CLIQUE --- */}
+        <div className="absolute bottom-[23%] left-[19%] right-[7%] h-[12%] flex gap-4 z-[999] pointer-events-auto">
           
           <button 
             type="button"
-            onClick={() => setIsRsvpOpen(true)}
-            className="flex-1 h-full opacity-0 cursor-pointer active:bg-purple-500/10"
-          />
-
-          <button 
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsTransportOpen(true);
+            onClick={(e) => { 
+              e.preventDefault(); 
+              e.stopPropagation(); 
+              setIsRsvpOpen(true); 
             }}
-            className="flex-1 h-full opacity-0 cursor-pointer active:bg-blue-500/10"
+            className="flex-1 h-full opacity-0 cursor-pointer"
           />
 
           <button 
             type="button"
-            onClick={() => setIsGiftsOpen(true)}
-            className="flex-1 h-full opacity-0 cursor-pointer active:bg-green-500/10"
+            onClick={(e) => { 
+              e.preventDefault(); 
+              e.stopPropagation(); 
+              setIsTransportOpen(true); 
+            }}
+            className="flex-1 h-full opacity-0 cursor-pointer"
+          />
+
+          <button 
+            type="button"
+            onClick={(e) => { 
+              e.preventDefault(); 
+              e.stopPropagation(); 
+              setIsGiftsOpen(true); 
+            }}
+            className="flex-1 h-full opacity-0 cursor-pointer"
           />
         </div>
       </div>
 
-      {/* --- MODAIS (IMPORTANTE: O DE TRANSPORTE FICOU POR ÚLTIMO PARA PRIORIDADE) --- */}
+      {/* --- MODAIS --- */}
+      <Modal isOpen={isRsvpOpen} onClose={() => setIsRsvpOpen(false)}>
+        {/* Adicionei boxSizing e overflow pra segurar o campo e não cortar */}
+        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '16px', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
+          
+          {/* NOSSO TÍTULO PADRÃO FIFA: Longe do X, centralizado e roxinho */}
+          <h2 style={{ textAlign: 'center', color: '#4c1d95', fontSize: '22px', fontWeight: '900', marginTop: '5px', marginBottom: '20px' }}>
+            Confirmar Presença 🥳
+          </h2>
 
-      <Modal isOpen={isRsvpOpen} onClose={() => setIsRsvpOpen(false)} title="Confirmar Presença 🥳">
-        <RsvpForm onClose={() => setIsRsvpOpen(false)} />
+          <RsvpForm onClose={() => setIsRsvpOpen(false)} />
+        </div>
       </Modal>
 
       <Modal isOpen={isGiftsOpen} onClose={() => setIsGiftsOpen(false)} noPadding={true}>
         <Image src="/images/sugestao-presentes.jpg" alt="Presentes" width={600} height={1000} className="w-full h-auto object-contain max-h-[85vh]" priority />
       </Modal>
 
-      {/* MODAL DE TRANSPORTE - Colocado por último no DOM */}
-      <Modal isOpen={isTransportOpen} onClose={() => setIsTransportOpen(false)} noPadding={true}>
-        <div className="relative w-full overflow-hidden bg-white" style={{ height: '580px', minWidth: '300px' }}>
-          <Image 
-            src="/images/uber.jpg" 
-            alt="Transporte" 
-            fill 
-            className="object-cover" 
-            priority 
-            sizes="360px"
-          />
-          <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-white/95 via-transparent to-transparent">
-            <div className="mt-8 self-center bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-md border border-purple-100">
-              <h3 className="text-lg font-bold text-purple-900 italic">Como deseja ir? 🚗</h3>
-            </div>
-            <div className="flex flex-col gap-3 mb-4 w-full">
-              <a href={UBER_URL} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between bg-black text-white p-4 rounded-2xl shadow-xl active:scale-95 transition-transform">
-                <span className="font-bold text-lg text-white">Uber</span>
-                <Car size={24} color="white" />
-              </a>
-              <a href={NINETY_NINE_URL} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between bg-[#FFD500] text-black p-4 rounded-2xl shadow-xl active:scale-95 transition-transform">
-                <span className="font-bold text-lg text-black">99App</span>
-                <div className="bg-black text-[#FFD500] px-2 py-0.5 rounded font-black text-xs text-center">99</div>
-              </a>
-              <button onClick={() => setIsTransportOpen(false)} className="text-purple-900/40 text-[10px] font-bold uppercase tracking-widest mt-2 py-2">
-                — Voltar ao Convite —
-              </button>
-            </div>
+      {/* --- MODAL DO TRANSPORTE COM O MAPS ADICIONADO --- */}
+      <Modal isOpen={isTransportOpen} onClose={() => setIsTransportOpen(false)}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', padding: '20px', backgroundColor: 'white', borderRadius: '16px', boxSizing: 'border-box' }}>
+          
+          {/* NOSSO TÍTULO PADRÃO FIFA: Longe do X e arrumadinho */}
+          <h2 style={{ textAlign: 'center', color: '#4c1d95', fontSize: '22px', fontWeight: '900', marginTop: '5px', marginBottom: '5px' }}>
+            Como deseja ir? 🚗
+          </h2>
+
+          <p style={{ fontSize: '14px', color: '#6b7280', textAlign: 'center', margin: 0, marginBottom: '10px' }}>
+            Selecione seu aplicativo preferido:
+          </p>
+          
+          {/* Botão Uber */}
+          <a href={UBER_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#000', color: '#fff', padding: '16px 20px', borderRadius: '16px', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
+            <span>Uber</span>
+            <Car size={24} color="white" />
+          </a>
+
+          {/* Botão 99 */}
+          <a href={NINETY_NINE_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#FFD500', color: '#000', padding: '16px 20px', borderRadius: '16px', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px', boxShadow: '0 4px 10px rgba(255, 213, 0, 0.3)' }}>
+            <span>99App</span>
+            <div style={{ backgroundColor: '#000', color: '#FFD500', padding: '2px 8px', borderRadius: '5px', fontSize: '12px', fontWeight: '900' }}>99</div>
+          </a>
+
+          {/* Botão Google Maps */}
+          <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#4285F4', color: '#fff', padding: '16px 20px', borderRadius: '16px', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px', boxShadow: '0 4px 10px rgba(66, 133, 244, 0.3)' }}>
+            <span>Google Maps</span>
+            <MapPin size={24} color="white" />
+          </a>
+
+          <div style={{ marginTop: '10px', paddingTop: '15px', borderTop: '1px solid #f3f4f6', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 'bold', margin: 0 }}>Destino Selecionado:</p>
+            <p style={{ fontSize: '12px', color: '#9333ea', fontWeight: '600', marginTop: '4px' }}>Sítio Lírio dos Vales - Magé, RJ</p>
           </div>
+
         </div>
       </Modal>
 
