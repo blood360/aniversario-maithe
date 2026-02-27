@@ -14,8 +14,8 @@ const LOCATION = {
 };
 
 const UBER_URL = `https://m.uber.com/ul/?action=setPickup&client_id=&pickup=my_location&dropoff[latitude]=${LOCATION.lat}&dropoff[longitude]=${LOCATION.lng}&dropoff[nickname]=${encodeURIComponent(LOCATION.nickname)}&dropoff[formatted_address]=${encodeURIComponent(LOCATION.address)}`;
-const NINETY_NINE_URL = `https://99app.com/ul/?action=setPickup&dropoff[latitude]=${LOCATION.lat}&dropoff[longitude]=${LOCATION.lng}`;
-const GOOGLE_MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${LOCATION.lat},${LOCATION.lng}`; // <-- Rota do Maps
+const NINETY_NINE_URL = `taxis99://call?dropoff_latitude=${LOCATION.lat}&dropoff_longitude=${LOCATION.lng}`;
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${LOCATION.lat},${LOCATION.lng}`;
 
 export default function Home() {
   const [isRsvpOpen, setIsRsvpOpen] = useState(false);
@@ -72,10 +72,7 @@ export default function Home() {
 
       {/* --- MODAIS --- */}
       <Modal isOpen={isRsvpOpen} onClose={() => setIsRsvpOpen(false)}>
-        {/* Adicionei boxSizing e overflow pra segurar o campo e não cortar */}
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '16px', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
-          
-          {/* NOSSO TÍTULO PADRÃO FIFA: Longe do X, centralizado e roxinho */}
           <h2 style={{ textAlign: 'center', color: '#4c1d95', fontSize: '22px', fontWeight: '900', marginTop: '5px', marginBottom: '20px' }}>
             Confirmar Presença 🥳
           </h2>
