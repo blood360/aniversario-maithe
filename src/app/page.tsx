@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Modal } from '@/components/ui/Modal'; 
 import { RsvpForm } from '@/components/RsvpForm';
-import { Car, MapPin } from 'lucide-react'; // <-- Adicionei só o ícone do mapa aqui
+import { Car, MapPin } from 'lucide-react';
 
 const LOCATION = {
   lat: -22.6810774,
